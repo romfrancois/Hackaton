@@ -17,12 +17,20 @@ class TeamDetailTableViewController: UITableViewController {
     @IBOutlet weak var projectNameField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var imageView: UIImageView!
     
     var team: Team!
+    
+    var appImage: UIImage!
+    
     let regionDistance: CLLocationDistance = 50_000 // 50 KM
+    
+    var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        imagePicker.delegate = self
         
         if team == nil {
             team = Team()
@@ -33,6 +41,8 @@ class TeamDetailTableViewController: UITableViewController {
         
         updateUserInterface()
     }
+    
+    
     
     func updateUserInterface() {
         teamNameField.text = team.teamName
@@ -90,6 +100,12 @@ class TeamDetailTableViewController: UITableViewController {
         present(autocompleteController, animated: true, completion: nil)
     }
     
+    
+    
+    @IBAction func cameraButtonPressed(_ sender: UIBarButtonItem) {
+        cameraOrLibraryAlert()
+    }
+    
 }
 
 extension TeamDetailTableViewController: GMSAutocompleteViewControllerDelegate {
@@ -116,14 +132,55 @@ extension TeamDetailTableViewController: GMSAutocompleteViewControllerDelegate {
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
         dismiss(animated: true, completion: nil)
     }
+}
+
+extension TeamDetailTableViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    // Turn the network activity indicator on and off again.
-    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            appImage = editedImage
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            appImage = originalImage
+        }
+        
+        dismiss(animated: true) {
+            self.imageView.image = self.appImage
+        }
     }
     
-    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
+    func cameraOrLibraryAlert() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { (_) in
+            self.accessLibrary()
+        }
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (_) in
+            self.accessCamera()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(photoLibraryAction)
+        alertController.addAction(cameraAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func accessLibrary() {
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func accessCamera() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.sourceType = .camera
+            present(imagePicker, animated: true, completion: nil)
+        } else {
+            self.oneButtonAlert(title: "Camera Not Available", message: "There is no camera available on this device.")
+        }
+    }
 }

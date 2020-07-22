@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1241CC16A02740A60DAC283 /* Pods_Hackaton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A471BD5CAFF1004052C2D74 /* Pods_Hackaton.framework */; };
+		F017E35D24C83809007DA8EF /* UIViewController+alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = F017E35C24C83809007DA8EF /* UIViewController+alert.swift */; };
 		F061BDCD24C5D97F00261816 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F061BDCC24C5D97F00261816 /* GoogleService-Info.plist */; };
 		F0A5611324C5CBB900CC0CE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A5611224C5CBB900CC0CE7 /* AppDelegate.swift */; };
 		F0A5611524C5CBB900CC0CE7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A5611424C5CBB900CC0CE7 /* SceneDelegate.swift */; };
@@ -25,6 +26,7 @@
 		26B4A4D00826FFC1FEF50BDF /* Pods-Hackaton.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hackaton.release.xcconfig"; path = "Target Support Files/Pods-Hackaton/Pods-Hackaton.release.xcconfig"; sourceTree = "<group>"; };
 		86CEA0B95A5BC722FD89AC06 /* Pods-Hackaton.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hackaton.debug.xcconfig"; path = "Target Support Files/Pods-Hackaton/Pods-Hackaton.debug.xcconfig"; sourceTree = "<group>"; };
 		8A471BD5CAFF1004052C2D74 /* Pods_Hackaton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hackaton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F017E35C24C83809007DA8EF /* UIViewController+alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+alert.swift"; sourceTree = "<group>"; };
 		F061BDCC24C5D97F00261816 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		F0A5610F24C5CBB900CC0CE7 /* Hackaton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hackaton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A5611224C5CBB900CC0CE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				F0A5611424C5CBB900CC0CE7 /* SceneDelegate.swift */,
 				F0A5611624C5CBB900CC0CE7 /* TeamsListViewController.swift */,
 				F0DF3A9224C5ED830095F8DF /* TeamDetailTableViewController.swift */,
+				F017E35C24C83809007DA8EF /* UIViewController+alert.swift */,
 				F0E0719524C60C1600B6D535 /* Team.swift */,
 				F0E0719724C6E77500B6D535 /* Teams.swift */,
 				F0A5611824C5CBB900CC0CE7 /* Main.storyboard */,
@@ -247,6 +250,7 @@
 				F0A5611524C5CBB900CC0CE7 /* SceneDelegate.swift in Sources */,
 				F0E0719624C60C1600B6D535 /* Team.swift in Sources */,
 				F0DF3A9324C5ED830095F8DF /* TeamDetailTableViewController.swift in Sources */,
+				F017E35D24C83809007DA8EF /* UIViewController+alert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
