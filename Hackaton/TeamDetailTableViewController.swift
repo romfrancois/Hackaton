@@ -21,8 +21,6 @@ class TeamDetailTableViewController: UITableViewController {
     
     var team: Team!
     
-    var appImage: UIImage!
-    
     let regionDistance: CLLocationDistance = 50_000 // 50 KM
     
     var imagePicker = UIImagePickerController()
@@ -85,7 +83,12 @@ class TeamDetailTableViewController: UITableViewController {
         updateFromUserInterface()
         team.saveData { success in
             if success {
-                self.leaveViewController()
+                self.team.saveImage { (success) in
+                    if !success {
+                        print("WARMING: Could not save image.")
+                    }
+                    self.leaveViewController()
+                }
             } else {
                 print("*** ERROR: Couldn't leave this view controller because data wasn't saved.")
             }
@@ -138,13 +141,13 @@ extension TeamDetailTableViewController: UINavigationControllerDelegate, UIImage
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            appImage = editedImage
+            team.appImage = editedImage
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            appImage = originalImage
+            team.appImage = originalImage
         }
         
         dismiss(animated: true) {
-            self.imageView.image = self.appImage
+            self.imageView.image = self.team.appImage
         }
     }
     

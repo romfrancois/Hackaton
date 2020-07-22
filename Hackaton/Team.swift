@@ -11,6 +11,7 @@ import CoreLocation
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
 import MapKit
 
 class Team: NSObject, MKAnnotation {
@@ -20,6 +21,8 @@ class Team: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var projectName: String
     var projectDescription: String
+    var appImage: UIImage
+    var appImageUUID: String
     var createdOn: Date
     var postingUserID: String
     var documentID: String
@@ -51,17 +54,20 @@ class Team: NSObject, MKAnnotation {
             "longitude": longitude,
             "projectName": projectName,
             "projectDescription": projectDescription,
+            "appImageUUID": appImageUUID,
             "createdOn": timeIntervalDate,
             "postingUserID": postingUserID,
             "documentID": documentID
         ]
     }
     
-    init(teamName: String, university: String, coordinates: CLLocationCoordinate2D, projectName: String, projectDescription: String, createdOn: Date, postingUserID: String, documentID: String) {
+    init(teamName: String, university: String, coordinates: CLLocationCoordinate2D, projectName: String, projectDescription: String, appImage: UIImage, appImageUUID: String, createdOn: Date, postingUserID: String, documentID: String) {
         self.teamName = teamName
         self.university = university
         self.coordinate = coordinates
         self.projectName = projectName
+        self.appImage = appImage
+        self.appImageUUID = appImageUUID
         self.projectDescription = projectDescription
         self.createdOn = createdOn
         self.postingUserID = postingUserID
@@ -76,17 +82,18 @@ class Team: NSObject, MKAnnotation {
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let projectName = dictionary["projectName"] as! String? ?? ""
         let projectDescription = dictionary["projectDescription"] as! String? ?? ""
+        let appImageUUID = dictionary["appImageUUID"] as! String? ?? ""
         
         let timeIntervalDate = dictionary["createdOn"] as! TimeInterval? ?? TimeInterval()
         let createdOn = Date(timeIntervalSince1970: timeIntervalDate)
         
         let postingUserID = dictionary["postingUserID"] as! String? ?? ""
         
-        self.init(teamName: teamName, university: university, coordinates: coordinate, projectName: projectName, projectDescription: projectDescription, createdOn: createdOn, postingUserID: postingUserID, documentID:"")
+        self.init(teamName: teamName, university: university, coordinates: coordinate, projectName: projectName, projectDescription: projectDescription, appImage: UIImage(), appImageUUID: appImageUUID, createdOn: createdOn, postingUserID: postingUserID, documentID:"")
     }
     
     convenience override init() {
-        self.init(teamName: "", university: "", coordinates: CLLocationCoordinate2D() , projectName: "", projectDescription: "", createdOn: Date(), postingUserID: "", documentID:"")
+        self.init(teamName: "", university: "", coordinates: CLLocationCoordinate2D() , projectName: "", projectDescription: "", appImage: UIImage(), appImageUUID: "", createdOn: Date(), postingUserID: "", documentID:"")
     }
     
     // NOTE: If you keep the same programming conventions (e.g. a calculated property .dictionary that converts class properties to String: Any pairs, the name of the document stored in the class as .documentID) then the only thing you'll need to change is the document path (i.e. the lines containing "team" below.
@@ -122,6 +129,57 @@ class Team: NSObject, MKAnnotation {
                     completion(true)
                 }
             }
+        }
+    }
+    
+    func saveImage(completed: @escaping (Bool) -> ()) {
+        let db = Firestore.firestore()
+        let storage = Storage.storage()
+        
+        // convert appImage to a Data type so it can be saved by Firebase Storage
+        guard let imageToSave = self.appImage.jpegData(compressionQuality: 0.5) else {
+            print("ERROR: could not convert image to data format.")
+            return completed(false)
+        }
+        
+        let uploadMetaData = StorageMetadata()
+        uploadMetaData.contentType = "image/jpeg"
+        
+        if appImageUUID == "" {
+            // if there's no UUID, then create one
+            appImageUUID = UUID().uuidString
+        }
+        // create a ref to upload storage with the uuid we created
+        let storageRef = storage.reference().child(documentID).child(self.appImageUUID)
+        let uploadTask = storageRef.putData(imageToSave, metadata: uploadMetaData) { (metadata, error) in
+            guard error == nil else {
+                print("ERROR: during .putData storage upload for reference \(storageRef). ERROR = \(error?.localizedDescription)")
+                return completed(false)
+            }
+            
+            print("Upload worked! Metadata is \(metadata)")
+        }
+        
+        uploadTask.observe(.success) { (snapshot) in
+            // Create the dictionary representing the data we want to save
+            let dataToSave = self.dictionary
+            let ref = db.collection("teams").document(self.documentID)
+            ref.setData(dataToSave) { (error) in
+                if let error = error {
+                    print("ERROR: saving document \(self.documentID) in success observer. Error = \(error.localizedDescription)")
+                    return completed(false)
+                } else {
+                    print("Document updated with ref ID \(ref.documentID)")
+                    return completed(true)
+                }
+            }
+        }
+        
+        uploadTask.observe(.failure) { (snapshot) in
+            if let error = snapshot.error {
+                print("ERROR: \(error.localizedDescription) upload task for file \(self.appImageUUID)")
+            }
+            return completed(false)
         }
     }
 }
