@@ -34,6 +34,10 @@ class TeamDetailTableViewController: UITableViewController {
             team = Team()
         }
         
+        team.loadImage {
+            self.imageView.image = self.team.appImage
+        }
+        
         let region = MKCoordinateRegion(center: team.coordinate, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
         mapView.setRegion(region, animated: true)
         
@@ -119,7 +123,7 @@ extension TeamDetailTableViewController: GMSAutocompleteViewControllerDelegate {
         
         team.university = place.name ?? "Unknown School"
         team.coordinate = place.coordinate
-        team.projectDescription = "\(team.coordinate.latitude), \(team.coordinate.longitude)"
+//        team.projectDescription = "\(team.coordinate.latitude), \(team.coordinate.longitude)"
         
         updateUserInterface()
         

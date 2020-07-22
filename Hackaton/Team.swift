@@ -182,4 +182,25 @@ class Team: NSObject, MKAnnotation {
             return completed(false)
         }
     }
+    
+    func loadImage(completed: @escaping () -> ()) {
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child(self.documentID).child(self.appImageUUID)
+        
+        // %MB = 5 * 1024 * 1024
+        storageRef.getData(maxSize: 5 * 1024 * 1024) { (data, error) in
+            guard error == nil else {
+                print("ERROR: Could not load image from bucket \(self.documentID) for file \(self.appImageUUID).")
+                return completed()
+            }
+            
+            guard let downloadedImage = UIImage(data: data!) else {
+                print("ERROR: Could not convert data to image from bucket \(self.documentID) for file \(self.appImageUUID).")
+                return completed()
+            }
+            
+            self.appImage = downloadedImage
+            completed()
+        }
+    }
 }
