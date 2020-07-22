@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import MapKit
 
 class TeamDetailTableViewController: UITableViewController {
     
@@ -15,8 +16,10 @@ class TeamDetailTableViewController: UITableViewController {
     @IBOutlet weak var universityField: UITextField!
     @IBOutlet weak var projectNameField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
+    @IBOutlet weak var mapView: MKMapView!
     
     var team: Team!
+    let regionDistance: CLLocationDistance = 50_000 // 50 KM
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,9 @@ class TeamDetailTableViewController: UITableViewController {
         if team == nil {
             team = Team()
         }
+        
+        let region = MKCoordinateRegion(center: team.coordinate, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+        mapView.setRegion(region, animated: true)
         
         updateUserInterface()
     }
@@ -33,6 +39,14 @@ class TeamDetailTableViewController: UITableViewController {
         universityField.text = team.university
         projectNameField.text = team.projectName
         descriptionTextView.text = team.projectDescription
+        
+        updateMap()
+    }
+    
+    func updateMap() {
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(team)
+        mapView.setCenter(team.coordinate, animated: true)
     }
     
     func updateFromUserInterface() {
@@ -85,8 +99,8 @@ extension TeamDetailTableViewController: GMSAutocompleteViewControllerDelegate {
         updateFromUserInterface()
         
         team.university = place.name ?? "Unknown School"
-        team.coordinates = place.coordinate
-        team.projectDescription = "\(team.coordinates.latitude), \(team.coordinates.longitude)"
+        team.coordinate = place.coordinate
+        team.projectDescription = "\(team.coordinate.latitude), \(team.coordinate.longitude)"
         
         updateUserInterface()
         

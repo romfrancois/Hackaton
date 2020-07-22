@@ -18,6 +18,7 @@
 		F0DF3A9324C5ED830095F8DF /* TeamDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DF3A9224C5ED830095F8DF /* TeamDetailTableViewController.swift */; };
 		F0E0719624C60C1600B6D535 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0719524C60C1600B6D535 /* Team.swift */; };
 		F0E0719824C6E77500B6D535 /* Teams.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E0719724C6E77500B6D535 /* Teams.swift */; };
+		F0FD49F724C7761A0078E464 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FD49F624C7761A0078E464 /* APIKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		F0DF3A9224C5ED830095F8DF /* TeamDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailTableViewController.swift; sourceTree = "<group>"; };
 		F0E0719524C60C1600B6D535 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		F0E0719724C6E77500B6D535 /* Teams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teams.swift; sourceTree = "<group>"; };
+		F0FD49F624C7761A0078E464 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				F0A5611D24C5CBBB00CC0CE7 /* LaunchScreen.storyboard */,
 				F0A5612024C5CBBB00CC0CE7 /* Info.plist */,
 				F061BDCC24C5D97F00261816 /* GoogleService-Info.plist */,
+				F0FD49F624C7761A0078E464 /* APIKeys.swift */,
 			);
 			path = Hackaton;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 			files = (
 				F0E0719824C6E77500B6D535 /* Teams.swift in Sources */,
 				F0A5611724C5CBB900CC0CE7 /* TeamsListViewController.swift in Sources */,
+				F0FD49F724C7761A0078E464 /* APIKeys.swift in Sources */,
 				F0A5611324C5CBB900CC0CE7 /* AppDelegate.swift in Sources */,
 				F0A5611524C5CBB900CC0CE7 /* SceneDelegate.swift in Sources */,
 				F0E0719624C60C1600B6D535 /* Team.swift in Sources */,

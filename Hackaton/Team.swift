@@ -11,11 +11,13 @@ import CoreLocation
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
+import MapKit
 
-class Team {
+class Team: NSObject, MKAnnotation {
+    
     var teamName: String
     var university: String
-    var coordinates: CLLocationCoordinate2D
+    var coordinate: CLLocationCoordinate2D
     var projectName: String
     var projectDescription: String
     var createdOn: Date
@@ -23,11 +25,19 @@ class Team {
     var documentID: String
     
     var latitude: CLLocationDegrees {
-        return coordinates.latitude
+        return coordinate.latitude
     }
     
     var longitude: CLLocationDegrees {
-        return coordinates.longitude
+        return coordinate.longitude
+    }
+    
+    var title: String? {
+        return teamName
+    }
+    
+    var subtitle: String? {
+        return university
     }
     
     var dictionary: [String: Any] {
@@ -50,7 +60,7 @@ class Team {
     init(teamName: String, university: String, coordinates: CLLocationCoordinate2D, projectName: String, projectDescription: String, createdOn: Date, postingUserID: String, documentID: String) {
         self.teamName = teamName
         self.university = university
-        self.coordinates = coordinates
+        self.coordinate = coordinates
         self.projectName = projectName
         self.projectDescription = projectDescription
         self.createdOn = createdOn
@@ -75,7 +85,7 @@ class Team {
         self.init(teamName: teamName, university: university, coordinates: coordinate, projectName: projectName, projectDescription: projectDescription, createdOn: createdOn, postingUserID: postingUserID, documentID:"")
     }
     
-    convenience init() {
+    convenience override init() {
         self.init(teamName: "", university: "", coordinates: CLLocationCoordinate2D() , projectName: "", projectDescription: "", createdOn: Date(), postingUserID: "", documentID:"")
     }
     
